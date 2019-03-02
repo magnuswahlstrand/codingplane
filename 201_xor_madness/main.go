@@ -49,7 +49,7 @@ func update(screen *ebiten.Image) error {
 		screen.DrawImage(img.SubImage(r.size).(*ebiten.Image), op)
 	}
 
-	t += 0.3 / 60.0
+	t += 0.25 / 60.0
 	return nil
 }
 
@@ -68,7 +68,7 @@ func main() {
 		})
 	}
 
-	if err := ebiten.Run(update, w, h, 1, "kinect example"); err != nil {
+	if err := ebiten.Run(update, w, h, 0.7, "xor madness"); err != nil {
 		fmt.Println("exited")
 	}
 }
