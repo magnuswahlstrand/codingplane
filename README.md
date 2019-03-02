@@ -1,7 +1,13 @@
+# Adventure is Noiseland
 
+Inspired by the work of [@shiffman](https://twitter.com/shiffman) and [@etiennejcb](https://twitter.com/etiennejcb).
 
- |                                             |     |
- | ------------------------------------------- | --- |
- | ![xor madness](./201_xor_madness/small.gif) | B1  |
- | A2                                          | B2  |
- | A3                                          | B3  |
+Articles:
+
+- [Drawing from noise](https://necessarydisorder.wordpress.com/2017/11/15/drawing-from-noise-and-then-making-animated-loopy-gifs-from-there/)
+
+| <h3>zebra noise</h3>![zebra noise](./101_zebranoise/small.gif)  | <h3>motion blur</h3>![motion blur](./02_motion_blur/small.gif)                          |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| <h3>xor madness</h3>![xor madness](./201_xor_madness/small.gif) | <h3>displacement circle</h3>![displacement circle](./102_displacement_circle/small.gif) |
+| <h3>pink arm</h3>![pink arm](./200_pink_arm/small.gif)          | <h3>sliding rectangles</h3>![sliding rectangles](./103_sliding_rectangles/small.gif)    |
+| <h3>starfield</h3>![starfield](./1_starfield/small.gif)         |                                                                                         |
