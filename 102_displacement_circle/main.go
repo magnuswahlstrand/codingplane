@@ -15,7 +15,7 @@ import (
 
 // https://necessarydisorder.wordpress.com/2017/11/15/drawing-from-noise-and-then-making-animated-loopy-gifs-from-there/
 const (
-	w, h = 400, 400
+	w, h = 500, 500
 )
 
 var (
@@ -33,7 +33,7 @@ func init() {
 
 func update(screen *ebiten.Image) error {
 	op := &ebiten.DrawImageOptions{}
-	op.ColorM.Scale(1, 1, 1, 0.3)
+	op.ColorM.Scale(1, 1, 1, 0.35)
 	memory.DrawImage(darken, op)
 
 	r := 0.8
@@ -94,9 +94,9 @@ func main() {
 		}
 	}
 
-	ebiten.SetMaxTPS(30)
+	ebiten.SetMaxTPS(20)
 
-	if err := ebiten.Run(update, w, h, 0.7, "displacement circle"); err != nil {
+	if err := ebiten.Run(update, w, h, 1, "displacement circle"); err != nil {
 		fmt.Println("exited")
 	}
 }
