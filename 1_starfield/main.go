@@ -58,7 +58,7 @@ func main() {
 		stars = append(stars, newStar())
 	}
 
-	if err := ebiten.Run(update, width, height, 1, "menu example"); err != nil {
+	if err := ebiten.Run(update, width, height, 0.7, "menu example"); err != nil {
 		log.Fatal(err)
 	}
 }

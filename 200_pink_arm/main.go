@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 	"log"
 	"math"
@@ -36,7 +35,6 @@ func update(screen *ebiten.Image) error {
 		t := float64(time.Now().UnixNano()/1000%10000000) / 10000000
 		sx := 0.5 + 0.5*noiser.Noise3D(math.Cos(2*math.Pi*t), math.Sin(2*math.Pi*t), float64(i)/float64(len(circles)))
 		sy := 0.5 + 0.5*noiser.Noise3D(math.Cos(2*math.Pi*t), math.Sin(2*math.Pi*t), float64(i+len(circles))/float64(len(circles)))
-		fmt.Println(sx, t)
 		op = &ebiten.DrawImageOptions{}
 		op.GeoM.Scale(c.scale, c.scale)
 		op.GeoM.Translate(width*sx, height*sy)
@@ -57,7 +55,7 @@ func main() {
 		circles = append(circles, Circle{Vec: pos, scale: (0.5 + 0.5*rand.Float64())})
 	}
 
-	if err := ebiten.Run(update, width, height, 1, "menu example"); err != nil {
+	if err := ebiten.Run(update, width, height, 0.7, "pink arm"); err != nil {
 		log.Fatal(err)
 	}
 }

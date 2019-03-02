@@ -1,13 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 	"log"
 	"math"
 	"time"
-
-	"github.com/hajimehoshi/ebiten/ebitenutil"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/peterhellberg/gfx"
@@ -50,7 +47,7 @@ func update(screen *ebiten.Image) error {
 		screen.DrawImage(img, op)
 	}
 
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("Current TPS: %v", ebiten.CurrentTPS()))
+	// ebitenutil.DebugPrint(screen, fmt.Sprintf("Current TPS: %v", ebiten.CurrentTPS()))
 	return nil
 }
 
@@ -70,7 +67,7 @@ func main() {
 		sum += math.Pow(fade, float64(i))
 	}
 
-	if err := ebiten.Run(update, width, height, 1, "motion blur"); err != nil {
+	if err := ebiten.Run(update, width, height, 0.7, "motion blur"); err != nil {
 		log.Fatal(err)
 	}
 }

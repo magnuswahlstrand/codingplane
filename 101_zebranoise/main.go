@@ -6,8 +6,6 @@ import (
 	"image/color"
 	"math"
 
-	"github.com/hajimehoshi/ebiten/ebitenutil"
-
 	"github.com/hajimehoshi/ebiten"
 	"github.com/peterhellberg/gfx"
 )
@@ -15,7 +13,7 @@ import (
 // https://necessarydisorder.wordpress.com/2017/11/15/drawing-from-noise-and-then-making-animated-loopy-gifs-from-there/
 
 const (
-	w, h = 300, 300
+	w, h = 400, 400
 )
 
 var (
@@ -45,7 +43,7 @@ func Sigmoid(v float64) float64 {
 func update(screen *ebiten.Image) error {
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
-			radius := 0.5
+			radius := 1.0
 			scale := 0.02
 			// t := float64(time.Now().UnixNano() / int64(time.Millisecond))
 			wt := 2 * math.Pi * t
@@ -54,9 +52,6 @@ func update(screen *ebiten.Image) error {
 			v := noiser.Noise4D(scale*float64(x), scale*float64(y), radius*rx, radius*ry)
 			i := 4 * (y*w + x)
 			if v > 0 {
-				// imgBytes[i] = mp(v, -1, 1, 0, 255)
-				// imgBytes[i+1] = mp(v, -1, 1, 0, 255)
-				// imgBytes[i+2] = mp(v, -1, 1, 0, 255)
 				imgBytes[i] = 255
 				imgBytes[i+1] = 255
 				imgBytes[i+2] = 255
@@ -70,9 +65,9 @@ func update(screen *ebiten.Image) error {
 	}
 	ebitenImg.ReplacePixels(imgBytes)
 	screen.DrawImage(ebitenImg, &ebiten.DrawImageOptions{})
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %v", ebiten.CurrentTPS()))
+	// ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %v", ebiten.CurrentTPS()))
 
-	t += 0.1 / 60.0
+	t += 0.1 / 40.0
 	return nil
 }
 
@@ -90,7 +85,7 @@ func main() {
 
 	ebiten.SetMaxTPS(40)
 
-	if err := ebiten.Run(update, w, h, 1, "kinect example"); err != nil {
+	if err := ebiten.Run(update, w, h, 0.7, "kinect example"); err != nil {
 		fmt.Println("exited")
 	}
 }
