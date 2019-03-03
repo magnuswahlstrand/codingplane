@@ -10,7 +10,7 @@ type Paddle struct {
 	pos gfx.Vec
 }
 
-func NewPaddle() Paddle {
+func newPaddle() Paddle {
 	offsetYBottom := 50.0
 	x := width / 2.0
 	y := height - offsetYBottom

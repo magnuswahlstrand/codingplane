@@ -20,6 +20,7 @@ const (
 var (
 	brickSize  image.Rectangle = image.Rect(0, 0, 35, 15)
 	paddleSize image.Rectangle = image.Rect(0, 0, 70, 25)
+	ballSize   image.Rectangle = image.Rect(0, 0, 15, 15)
 )
 
 func drawBorder(screen *ebiten.Image) {
@@ -53,11 +54,13 @@ func update(screen *ebiten.Image) error {
 	// Update position
 	x, _ := ebiten.CursorPosition()
 	paddle.updatePosition(float64(x))
+	ball.updatePosition()
 
 	// op := &ebiten.DrawImageOptions{}
 	screen.Fill(backgroundColor)
 	drawBorder(screen)
 	drawBricks(screen)
+	ball.draw(screen)
 	paddle.draw(screen)
 	return nil
 }
@@ -66,15 +69,18 @@ var (
 	backgroundColor = colornames.Lemonchiffon
 	borderColor     = colornames.Darkseagreen
 	paddleColor     = colornames.Firebrick
+	ballColor       = colornames.Tomato
 	colorImg        *ebiten.Image
 	paddle          Paddle
+	ball            Ball
 )
 
 func main() {
 	colorImg, _ = ebiten.NewImage(width+1, height+1, ebiten.FilterDefault)
 	colorImg.Fill(borderColor)
 
-	paddle = NewPaddle()
+	paddle = newPaddle()
+	ball = newBall()
 
 	if err := ebiten.Run(update, width, height, 1, "juicy colors"); err != nil {
 		log.Fatal(err)
