@@ -34,7 +34,7 @@ func (p *Paddle) updatePosition(x float64) {
 }
 
 func (p *Paddle) Hitbox() gfx.Rect {
-	return paddleSize.Moved(paddle.pos).Moved(paddleSize.Max.Scaled(-0.5))
+	return paddleSize.Moved(p.pos).Moved(paddleSize.Max.ScaledXY(gfx.V(-0.5, 0)))
 }
 
 func (p *Paddle) MarkCollided(t bool) {

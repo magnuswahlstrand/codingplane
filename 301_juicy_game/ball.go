@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"math/rand"
 
@@ -20,7 +19,7 @@ type Ball struct {
 }
 
 func (b *Ball) draw(screen *ebiten.Image) {
-	ebitenutil.DrawRect(screen, b.pos.X-ballSize.W()/2, b.pos.Y-ballSize.W()/2, ballSize.W(), ballSize.W(), ballColor)
+	ebitenutil.DrawRect(screen, b.pos.X-ballSize.W()/2, b.pos.Y-ballSize.W()/2, ballSize.W(), ballSize.H(), ballColor)
 }
 
 func newBall() Ball {
@@ -28,25 +27,50 @@ func newBall() Ball {
 	x := width / 2.0
 	y := height - offsetYBottom
 	return Ball{
-		pos: gfx.V(x, y),
-		// velocity: gfx.V(1, 0).Rotated(2 * math.Pi * rand.Float64()).Scaled(startingVelocity),
-		velocity: gfx.V(0, 1).Rotated(0 * 2 * math.Pi * rand.Float64()).Scaled(startingVelocity),
+		pos:      gfx.V(x, y),
+		velocity: gfx.V(1, 0).Rotated(2 * math.Pi * rand.Float64()).Scaled(startingVelocity),
+		// velocity: gfx.V(0, 1).Rotated(0 * 2 * math.Pi * rand.Float64()).Scaled(startingVelocity),
 	}
 }
 
 func (b *Ball) updatePosition() {
+	var collidedX, collidedY bool
+
 	// Move y
 	b.pos.Y += b.velocity.Y
 
 	// Check for collision
 	for _, c := range collidableObjects {
 
-		fmt.Println(c.Hitbox())
-		c.MarkCollided(c.Hitbox().Contains(b.pos))
+		hitbox := c.Hitbox()
+		collided := hitbox.Contains(b.pos)
+		c.MarkCollided(collided)
+
+		collidedY = collidedY || collided
 	}
 
-	// Check for collision
+	if collidedY {
+		// Revert move
+		b.pos.Y -= b.velocity.Y
+		b.velocity.Y = -b.velocity.Y
+	}
 
-	b.pos = b.pos.Add(b.velocity)
 	// Move x
+	b.pos.X += b.velocity.X
+
+	// Check for collision
+	for _, c := range collidableObjects {
+
+		hitbox := c.Hitbox()
+		collided := hitbox.Contains(b.pos)
+		c.MarkCollided(collided)
+
+		collidedX = collidedX || collided
+	}
+
+	if collidedX {
+		// Revert move
+		b.pos.X -= b.velocity.X
+		b.velocity.X = -b.velocity.X
+	}
 }
