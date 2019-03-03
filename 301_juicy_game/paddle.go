@@ -4,10 +4,12 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/peterhellberg/gfx"
+	"golang.org/x/image/colornames"
 )
 
 type Paddle struct {
-	pos gfx.Vec
+	pos      gfx.Vec
+	collided bool
 }
 
 func newPaddle() Paddle {
@@ -20,10 +22,21 @@ func newPaddle() Paddle {
 }
 
 func (p *Paddle) draw(screen *ebiten.Image) {
-	offsetX := float64(paddleSize.Dx()) / 2
-	ebitenutil.DrawRect(screen, p.pos.X-offsetX, p.pos.Y, float64(paddleSize.Dx()), float64(paddleSize.Dy()), paddleColor)
+	offsetX := paddleSize.W() / 2
+	ebitenutil.DrawRect(screen, p.pos.X-offsetX, p.pos.Y, paddleSize.W(), paddleSize.H(), paddleColor)
+	if p.collided {
+		ebitenutil.DrawRect(screen, p.pos.X-offsetX, p.pos.Y, paddleSize.W(), paddleSize.H(), colornames.White)
+	}
 }
 
 func (p *Paddle) updatePosition(x float64) {
 	p.pos.X = x
+}
+
+func (p *Paddle) Hitbox() gfx.Rect {
+	return paddleSize.Moved(paddle.pos).Moved(paddleSize.Max.Scaled(-0.5))
+}
+
+func (p *Paddle) MarkCollided(t bool) {
+	p.collided = t
 }

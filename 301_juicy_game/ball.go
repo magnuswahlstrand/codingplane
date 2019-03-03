@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	startingVelocity = 7
+	startingVelocity = 1
 )
 
 type Ball struct {
@@ -20,20 +20,33 @@ type Ball struct {
 }
 
 func (b *Ball) draw(screen *ebiten.Image) {
-	ebitenutil.DrawRect(screen, b.pos.X-float64(ballSize.Dx())/2, b.pos.Y-float64(ballSize.Dy())/2, float64(ballSize.Dx()), float64(ballSize.Dy()), ballColor)
+	ebitenutil.DrawRect(screen, b.pos.X-ballSize.W()/2, b.pos.Y-ballSize.W()/2, ballSize.W(), ballSize.W(), ballColor)
 }
 
 func newBall() Ball {
 	offsetYBottom := 130.0
 	x := width / 2.0
 	y := height - offsetYBottom
-	fmt.Println(x, y)
 	return Ball{
-		pos:      gfx.V(x, y),
-		velocity: gfx.V(1, 0).Rotated(2 * math.Pi * rand.Float64()).Scaled(startingVelocity),
+		pos: gfx.V(x, y),
+		// velocity: gfx.V(1, 0).Rotated(2 * math.Pi * rand.Float64()).Scaled(startingVelocity),
+		velocity: gfx.V(0, 1).Rotated(0 * 2 * math.Pi * rand.Float64()).Scaled(startingVelocity),
 	}
 }
 
 func (b *Ball) updatePosition() {
+	// Move y
+	b.pos.Y += b.velocity.Y
+
+	// Check for collision
+	for _, c := range collidableObjects {
+
+		fmt.Println(c.Hitbox())
+		c.MarkCollided(c.Hitbox().Contains(b.pos))
+	}
+
+	// Check for collision
+
 	b.pos = b.pos.Add(b.velocity)
+	// Move x
 }

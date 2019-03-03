@@ -4,6 +4,8 @@ import (
 	"image"
 	"log"
 
+	"github.com/peterhellberg/gfx"
+
 	"golang.org/x/image/colornames"
 
 	"github.com/hajimehoshi/ebiten"
@@ -18,9 +20,9 @@ const (
 )
 
 var (
-	brickSize  image.Rectangle = image.Rect(0, 0, 35, 15)
-	paddleSize image.Rectangle = image.Rect(0, 0, 70, 25)
-	ballSize   image.Rectangle = image.Rect(0, 0, 15, 15)
+	brickSize  gfx.Rect = gfx.R(0, 0, 35, 15)
+	paddleSize gfx.Rect = gfx.R(0, 0, 70, 25)
+	ballSize   gfx.Rect = gfx.R(0, 0, 15, 15)
 )
 
 func drawBorder(screen *ebiten.Image) {
@@ -38,13 +40,13 @@ func drawBorder(screen *ebiten.Image) {
 
 func drawBricks(screen *ebiten.Image) {
 	offsetY := 50.0
-	offsetX := (width - (float64(brickSize.Dx())+spacing)*bricksX) / 2
+	offsetX := (width - (brickSize.W()+spacing)*bricksX) / 2
 
 	for y := 0.0; y < bricksY; y++ {
 		for x := 0.0; x < bricksX; x++ {
 			op := &ebiten.DrawImageOptions{}
-			op.GeoM.Translate((float64(brickSize.Dx())+spacing)*x+offsetX, (float64(brickSize.Dy())+spacing)*y+offsetY)
-			screen.DrawImage(colorImg.SubImage(brickSize).(*ebiten.Image), op)
+			op.GeoM.Translate((brickSize.W()+spacing)*x+offsetX, (brickSize.H()+spacing)*y+offsetY)
+			screen.DrawImage(colorImg.SubImage(brickSize.Bounds()).(*ebiten.Image), op)
 		}
 	}
 }
@@ -66,13 +68,14 @@ func update(screen *ebiten.Image) error {
 }
 
 var (
-	backgroundColor = colornames.Lemonchiffon
-	borderColor     = colornames.Darkseagreen
-	paddleColor     = colornames.Firebrick
-	ballColor       = colornames.Tomato
-	colorImg        *ebiten.Image
-	paddle          Paddle
-	ball            Ball
+	backgroundColor   = colornames.Lemonchiffon
+	borderColor       = colornames.Darkseagreen
+	paddleColor       = colornames.Firebrick
+	ballColor         = colornames.Tomato
+	colorImg          *ebiten.Image
+	paddle            Paddle
+	ball              Ball
+	collidableObjects []Collidable
 )
 
 func main() {
@@ -81,6 +84,8 @@ func main() {
 
 	paddle = newPaddle()
 	ball = newBall()
+
+	collidableObjects = append(collidableObjects, &paddle)
 
 	if err := ebiten.Run(update, width, height, 1, "juicy colors"); err != nil {
 		log.Fatal(err)
