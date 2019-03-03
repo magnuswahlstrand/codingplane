@@ -4,8 +4,6 @@ import (
 	"image"
 	"log"
 
-	"github.com/hajimehoshi/ebiten/ebitenutil"
-
 	"golang.org/x/image/colornames"
 
 	"github.com/hajimehoshi/ebiten"
@@ -50,20 +48,17 @@ func drawBricks(screen *ebiten.Image) {
 	}
 }
 
-func drawPaddle(screen *ebiten.Image) {
-	offsetYBottom := 50.0
-	x := (width - float64(paddleSize.Dx())) / 2
-	y := height - offsetYBottom
-	ebitenutil.DrawRect(screen, x, y, float64(paddleSize.Dx()), float64(paddleSize.Dy()), paddleColor)
-}
-
 func update(screen *ebiten.Image) error {
+
+	// Update position
+	x, _ := ebiten.CursorPosition()
+	paddle.updatePosition(float64(x))
+
 	// op := &ebiten.DrawImageOptions{}
 	screen.Fill(backgroundColor)
 	drawBorder(screen)
 	drawBricks(screen)
-	drawPaddle(screen)
-
+	paddle.draw(screen)
 	return nil
 }
 
@@ -72,11 +67,14 @@ var (
 	borderColor     = colornames.Darkseagreen
 	paddleColor     = colornames.Firebrick
 	colorImg        *ebiten.Image
+	paddle          Paddle
 )
 
 func main() {
 	colorImg, _ = ebiten.NewImage(width+1, height+1, ebiten.FilterDefault)
 	colorImg.Fill(borderColor)
+
+	paddle = NewPaddle()
 
 	if err := ebiten.Run(update, width, height, 1, "juicy colors"); err != nil {
 		log.Fatal(err)
