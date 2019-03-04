@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	startingVelocity = 1
+	startingVelocity = 5
 )
 
 type Ball struct {
@@ -41,16 +41,12 @@ func (b *Ball) updatePosition() {
 
 	// Check for collision
 	for _, c := range collidableObjects {
-
-		hitbox := c.Hitbox()
-		collided := hitbox.Contains(b.pos)
-		c.MarkCollided(collided)
-
+		collided := c.CollidingWith(b.pos)
 		collidedY = collidedY || collided
 	}
 
 	if collidedY {
-		// Revert move
+		// Revert move, and change direction
 		b.pos.Y -= b.velocity.Y
 		b.velocity.Y = -b.velocity.Y
 	}
@@ -60,16 +56,12 @@ func (b *Ball) updatePosition() {
 
 	// Check for collision
 	for _, c := range collidableObjects {
-
-		hitbox := c.Hitbox()
-		collided := hitbox.Contains(b.pos)
-		c.MarkCollided(collided)
-
+		collided := c.CollidingWith(b.pos)
 		collidedX = collidedX || collided
 	}
 
 	if collidedX {
-		// Revert move
+		// Revert move, and change direction
 		b.pos.X -= b.velocity.X
 		b.velocity.X = -b.velocity.X
 	}

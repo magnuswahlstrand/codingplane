@@ -33,10 +33,8 @@ func (p *Paddle) updatePosition(x float64) {
 	p.pos.X = x
 }
 
-func (p *Paddle) Hitbox() gfx.Rect {
-	return paddleSize.Moved(p.pos).Moved(paddleSize.Max.ScaledXY(gfx.V(-0.5, 0)))
-}
-
-func (p *Paddle) MarkCollided(t bool) {
-	p.collided = t
+func (p *Paddle) CollidingWith(pos gfx.Vec) bool {
+	hitbox := paddleSize.Moved(p.pos).Moved(paddleSize.Max.ScaledXY(gfx.V(-0.5, 0)))
+	p.collided = hitbox.Contains(pos)
+	return p.collided //.Moved(paddleSize.Max.Scaled(-0.5))
 }

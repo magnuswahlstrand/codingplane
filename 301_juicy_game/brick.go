@@ -21,10 +21,8 @@ func (b *Brick) draw(screen *ebiten.Image) {
 
 }
 
-func (b *Brick) Hitbox() gfx.Rect {
-	return brickSize.Moved(b.pos) //.Moved(paddleSize.Max.Scaled(-0.5))
-}
-
-func (b *Brick) MarkCollided(t bool) {
-	b.collided = t
+func (b *Brick) CollidingWith(pos gfx.Vec) bool {
+	hitbox := brickSize.Moved(b.pos)
+	b.collided = hitbox.Contains(pos)
+	return b.collided //.Moved(paddleSize.Max.Scaled(-0.5))
 }

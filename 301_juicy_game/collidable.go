@@ -5,6 +5,5 @@ import (
 )
 
 type Collidable interface {
-	Hitbox() gfx.Rect
-	MarkCollided(bool)
+	CollidingWith(gfx.Vec) bool
 }

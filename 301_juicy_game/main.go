@@ -1,7 +1,6 @@
 package main
 
 import (
-	"image"
 	"log"
 
 	"github.com/peterhellberg/gfx"
@@ -25,19 +24,6 @@ var (
 	ballSize   gfx.Rect = gfx.R(0, 0, 15, 15)
 )
 
-func drawBorder(screen *ebiten.Image) {
-	borderWidth := 10
-	top := image.Rect(0, 0, width, borderWidth)
-	side := image.Rect(0, borderWidth, borderWidth, height)
-	screen.DrawImage(colorImg.SubImage(top).(*ebiten.Image), &ebiten.DrawImageOptions{})
-
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(0, float64(borderWidth))
-	screen.DrawImage(colorImg.SubImage(side).(*ebiten.Image), op)
-	op.GeoM.Translate(width-float64(borderWidth), 0)
-	screen.DrawImage(colorImg.SubImage(side).(*ebiten.Image), op)
-}
-
 func update(screen *ebiten.Image) error {
 
 	// Update position
@@ -47,7 +33,7 @@ func update(screen *ebiten.Image) error {
 
 	// op := &ebiten.DrawImageOptions{}
 	screen.Fill(backgroundColor)
-	drawBorder(screen)
+	walls.draw(screen)
 	for _, b := range bricks {
 		b.draw(screen)
 	}
@@ -64,6 +50,7 @@ var (
 	colorImg          *ebiten.Image
 	paddle            Paddle
 	ball              Ball
+	walls             Walls
 	bricks            []*Brick
 	collidableObjects []Collidable
 )
@@ -77,7 +64,6 @@ func main() {
 
 	offsetY := 50.0
 	offsetX := (width - (brickSize.W()+spacing)*bricksX) / 2
-
 	for y := 0.0; y < bricksY; y++ {
 		for x := 0.0; x < bricksX; x++ {
 			sx := (brickSize.W()+spacing)*x + offsetX
@@ -88,6 +74,9 @@ func main() {
 			collidableObjects = append(collidableObjects, &b)
 		}
 	}
+
+	walls = newWalls()
+	collidableObjects = append(collidableObjects, &walls)
 
 	ball = newBall()
 	if err := ebiten.Run(update, width, height, 1, "juicy colors"); err != nil {
